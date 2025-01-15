@@ -230,3 +230,23 @@ And the response body is:
     The request is invalid, expected a double at index I.
 
 Where I is the index of the offending field.
+
+
+## 3. Generating an outcome file
+
+**Given** I have received a POST request \
+**When** all validation has passed \
+**Then** the response code is an HTTP 200 OK \
+And the `Content-Type` of the response is 'application/json' \
+And the response body is a JSON array in the following format:
+
+``` json
+[
+  {
+    "name": "John Smith",
+    "transport": "Rides A Bike",
+    "top-speed": 12.1
+  },
+  ...
+]
+```
