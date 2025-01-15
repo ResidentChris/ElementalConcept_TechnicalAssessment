@@ -1,6 +1,7 @@
 Confirmation criteria
 =====================
 
+
 ## 1. IP Address Validation
 
 Assumptions:
@@ -12,11 +13,13 @@ Assumptions:
 
 Check these assumptions with the PO.
 
+
 ### 1.1. IP Address Validation feature flag enabled
 
 **Given** the validation feature flag is enabled \
 **When** I receive a POST request \
 **Then** I validate the request's origin IP address using ip-api.com.
+
 
 ### 1.2. IP Address Validation feature flag disabled
 
@@ -136,3 +139,94 @@ And the response code is an HTTP 500 INTERNAL SERVER ERROR \
 And the response body is:
 
     IP address validation failed due to an error.
+
+
+
+## 2. File validation
+
+### 2.1. Valid file and request
+
+**Given** I have received a POST request \
+And the request has passed IP address validation \
+And request has a `Content-Type` of 'multipart/form-data' \
+And the multipart file contained in the request body has a content type of 'text/plain' \
+And each line of the file contains seven fields, separated by a `|` character \
+And each line ends with either a `\n` or an EOF (and may include trailing whitespace) \
+And the first field is a UUID \
+And the next four fields are Strings \
+And the final two fields are doubles \
+**When** I validate the file \
+**Then** the file passes validation.
+
+
+### 2.2. Empty lines
+
+**Given** I have received a POST request \
+And all validation has passed until now \
+And the file containes lines that are blank or contain only whitespace \
+**When** I validate the file \
+**Then** the file passes validation.
+
+
+### 2.3. Incorrect request body content type
+
+**Given** I have received a POST request \
+And all validation has passed until now \
+And the request has a `Content-Type` that is **not** 'multipart/form-data' \
+**When** I validate the file \
+**Then** the response code is an HTTP 400 BAD REQUEST \
+And the response body is:
+
+    The request is invalid, expected a text file.
+
+
+### 2.4. Incorrect file content type
+
+**Given** I have received a POST request \
+And all validation has passed until now \
+And the multipart file contained in the request body has a content type that is **not** 'text/plain' \
+**When** I validate the file \
+**Then** the response code is an HTTP 400 BAD REQUEST \
+And the response body is:
+
+    The request is invalid, expected a text file.
+
+
+### 2.5. Line validation
+
+#### 2.5.1 Wrong number of fields in line
+
+**Given** I have received a POST request \
+And all validation has passed until now \
+And a line in the file does **not** split into seven fields when split by the `|` character \
+**When** I validate the file \
+**Then** the response code is an HTTP 400 BAD REQUEST \
+And the response body is:
+
+    The request is invalid, expected seven fields per line but found N.
+
+Where N is the number of fields actually found on the offending line.
+
+#### 2.5.2 First field of line is not a UUID
+
+**Given** I have received a POST request \
+And all validation has passed until now \
+And the first field of a line in the file is **not** a UUID \
+**When** I validate the file \
+**Then** the response code is an HTTP 400 BAD REQUEST \
+And the response body is:
+
+    The request is invalid, expected a UUID at index 0.
+
+#### 2.5.3 Sixth or seventh field of line is not a double
+
+**Given** I have received a POST request \
+And all validation has passed until now \
+And the sixth or seventh field of a line in the file is **not** a double \
+**When** I validate the file \
+**Then** the response code is an HTTP 400 BAD REQUEST \
+And the response body is:
+
+    The request is invalid, expected a double at index I.
+
+Where I is the index of the offending field.
