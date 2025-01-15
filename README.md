@@ -1,0 +1,1 @@
+# ElementalConcept_TechnicalAssessment
