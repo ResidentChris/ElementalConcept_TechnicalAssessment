@@ -33,7 +33,7 @@ Check these assumptions with the PO.
 **When** I validate the request's origin IP address using ip-api.com \
 And the response code is an HTTP 200 OK \
 And the `success` property of the response is 'success' \
-And the `countryCode` property of the response is 'CN' \
+And the `countryCode` property of the response is '**CN**' \
 **Then** no other data in the request is processed \
 And the response code is an HTTP 403 FORBIDDEN \
 And the response body is:
@@ -46,7 +46,7 @@ And the response body is:
 **When** I validate the request's origin IP address using ip-api.com \
 And the response code is an HTTP 200 OK \
 And the `success` property of the response is 'success' \
-And the `countryCode` property of the response is 'ES' \
+And the `countryCode` property of the response is '**ES**' \
 **Then** no other data in the request is processed \
 And the response code is an HTTP 403 FORBIDDEN \
 And the response body is:
@@ -59,7 +59,7 @@ And the response body is:
 **When** I validate the request's origin IP address using ip-api.com \
 And the response code is an HTTP 200 OK \
 And the `success` property of the response is 'success' \
-And the `countryCode` property of the response is 'US' \
+And the `countryCode` property of the response is '**US**' \
 **Then** no other data in the request is processed \
 And the response code is an HTTP 403 FORBIDDEN \
 And the response body is:
