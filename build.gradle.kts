@@ -17,13 +17,24 @@ repositories {
 	mavenCentral()
 }
 
+val cucumberVersion = "7.20.1"
 val h2Version = "2.3.232"
+val junitVersion = "5.11.4"
 
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
+
+	testImplementation(platform("org.junit:junit-bom:$junitVersion"))
+	testImplementation("org.junit.platform:junit-platform-suite")
+
+	testImplementation(platform("io.cucumber:cucumber-bom:$cucumberVersion"))
+	testImplementation("io.cucumber:cucumber-java")
+	testImplementation("io.cucumber:cucumber-junit-platform-engine")
+	testImplementation("io.cucumber:cucumber-spring")
+
 	testImplementation("com.h2database:h2:$h2Version")
 
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
