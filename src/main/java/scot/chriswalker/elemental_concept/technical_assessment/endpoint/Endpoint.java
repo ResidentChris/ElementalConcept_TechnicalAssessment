@@ -2,9 +2,11 @@ package scot.chriswalker.elemental_concept.technical_assessment.endpoint;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.multipart.MultipartFile;
 import scot.chriswalker.elemental_concept.technical_assessment.exception.InitialFileReadException;
 import scot.chriswalker.elemental_concept.technical_assessment.model.OutcomeFileLine;
@@ -35,5 +37,10 @@ public class Endpoint {
     private ResponseEntity<List<OutcomeFileLine>> endpoint(InputStream inputStream) {
         var outcomeFile = fileConversionService.convertInputStreamToOutcomeFile(inputStream);
         return new ResponseEntity<>(outcomeFile, HttpStatus.OK);
+    }
+
+    @ExceptionHandler({MultipartException.class})
+    public ResponseEntity<String> handleException(MultipartException e) {
+        return new ResponseEntity<>("The request is invalid, expected a text file.", HttpStatus.BAD_REQUEST);
     }
 }
