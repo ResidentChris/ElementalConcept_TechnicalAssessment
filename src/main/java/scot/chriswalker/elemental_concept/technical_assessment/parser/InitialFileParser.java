@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -28,7 +29,7 @@ public class InitialFileParser {
         try {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
             while (bufferedReader.ready()) {
-                outFile.add(parseLine(bufferedReader.readLine()));
+                parseLine(bufferedReader.readLine()).ifPresent(outFile::add);
             }
         } catch (IOException e) {
             throw new InitialFileReadException(e);
@@ -36,15 +37,18 @@ public class InitialFileParser {
         return outFile;
     }
 
-    public InitialFileLine parseLine(String line) {
+    public Optional<InitialFileLine> parseLine(String line) {
+        if (line.trim().isEmpty()) {
+            return Optional.empty();
+        }
         String[] split = line.trim().split("\\|");
-        return new InitialFileLine(
+        return Optional.of(new InitialFileLine(
                 UUID.fromString(split[UUID_INDEX]),
                 split[ID],
                 split[NAME],
                 split[LIKES],
                 split[TRANSPORT],
                 Double.parseDouble(split[AVG_SPEED]),
-                Double.parseDouble(split[TOP_SPEED]));
+                Double.parseDouble(split[TOP_SPEED])));
     }
 }
