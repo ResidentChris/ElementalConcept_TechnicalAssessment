@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import scot.chriswalker.elemental_concept.technical_assessment.exception.InitialFileReadException;
 import scot.chriswalker.elemental_concept.technical_assessment.model.OutcomeFileLine;
-import scot.chriswalker.elemental_concept.technical_assessment.service.FileConversionOrchestrationService;
+import scot.chriswalker.elemental_concept.technical_assessment.orchestration.FileConversionOrchestrationService;
 
 import java.io.IOException;
 import java.io.InputStream;
