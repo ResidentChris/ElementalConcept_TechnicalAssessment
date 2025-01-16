@@ -19,6 +19,7 @@ repositories {
 
 val cucumberVersion = "7.20.1"
 val h2Version = "2.3.232"
+val jsonUnitVersion = "4.1.0"
 val junitVersion = "5.11.4"
 
 dependencies {
@@ -36,6 +37,7 @@ dependencies {
 	testImplementation("io.cucumber:cucumber-spring")
 
 	testImplementation("com.h2database:h2:$h2Version")
+	testImplementation("net.javacrumbs.json-unit:json-unit-assertj:$jsonUnitVersion")
 
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }

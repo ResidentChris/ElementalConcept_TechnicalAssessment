@@ -9,5 +9,4 @@ public class SpringBootTechnicalAssessmentApplication {
     public static void main(String[] args) {
         SpringApplication.run(SpringBootTechnicalAssessmentApplication.class, args);
     }
-
 }
