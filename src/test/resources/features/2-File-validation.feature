@@ -31,7 +31,15 @@ Feature: 2. File validation
     """
 
   Scenario: 2.3. Incorrect request body content type
-    When a request is received with a content type of "application/json"
+    When a request is received with a content type of application/json
+    Then the response code is an HTTP 400 BAD_REQUEST
+    And the response body is:
+    """
+    The request is invalid, expected a text file.
+    """
+
+  Scenario: 2.4. Incorrect file content type
+    When a multipart request is received containing a file with a content type of application/json
     Then the response code is an HTTP 400 BAD_REQUEST
     And the response body is:
     """

@@ -3,12 +3,14 @@ package scot.chriswalker.elemental_concept.technical_assessment.cucumber;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import java.io.UnsupportedEncodingException;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 public class StepDefs_2_FileValidation {
@@ -34,5 +36,19 @@ public class StepDefs_2_FileValidation {
     @And("the response body is:")
     public void validateReturnedData(String errorMessage) throws UnsupportedEncodingException {
         assertThat(result.getResponse().getContentAsString()).isEqualTo(errorMessage);
+    }
+
+    @When("a multipart request is received containing a file with a content type of {word}")
+    public void multipartRequestReceivedWithSpecifiedContentType(String contentType) throws Exception {
+        var content = """
+                            {"content": "doesn't matter"}
+                """;
+        var file = new MockMultipartFile(
+                "file",
+                "EntryFile.json",
+                contentType,
+                content.getBytes()
+        );
+        result = mockMvc.perform(multipart("/endpoint").file(file)).andReturn();
     }
 }

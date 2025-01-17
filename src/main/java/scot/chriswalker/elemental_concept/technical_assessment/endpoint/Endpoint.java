@@ -1,6 +1,7 @@
 package scot.chriswalker.elemental_concept.technical_assessment.endpoint;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.multipart.MultipartFile;
+import scot.chriswalker.elemental_concept.technical_assessment.exception.IncorrectFileContentTypeException;
 import scot.chriswalker.elemental_concept.technical_assessment.exception.InitialFileReadException;
 import scot.chriswalker.elemental_concept.technical_assessment.model.OutcomeFileLine;
 import scot.chriswalker.elemental_concept.technical_assessment.orchestration.FileConversionOrchestrationService;
@@ -27,6 +29,9 @@ public class Endpoint {
 
     @PostMapping("endpoint")
     public ResponseEntity<List<OutcomeFileLine>> endpoint(@RequestPart MultipartFile file) {
+        if (MediaType.APPLICATION_JSON_VALUE.equals(file.getContentType())) {
+            throw new IncorrectFileContentTypeException();
+        }
         try {
             return endpoint(file.getInputStream());
         } catch (IOException e) {
@@ -41,6 +46,11 @@ public class Endpoint {
 
     @ExceptionHandler({MultipartException.class})
     public ResponseEntity<String> handleException(MultipartException e) {
+        return new ResponseEntity<>("The request is invalid, expected a text file.", HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler({IncorrectFileContentTypeException.class})
+    public ResponseEntity<String> handleException(IncorrectFileContentTypeException e) {
         return new ResponseEntity<>("The request is invalid, expected a text file.", HttpStatus.BAD_REQUEST);
     }
 }
