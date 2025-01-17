@@ -1,9 +1,9 @@
 package scot.chriswalker.elemental_concept.technical_assessment.parser;
 
 import org.springframework.stereotype.Service;
-import scot.chriswalker.elemental_concept.technical_assessment.exception.IncorrectNumberOfFieldsInLineException;
 import scot.chriswalker.elemental_concept.technical_assessment.exception.InitialFileReadException;
 import scot.chriswalker.elemental_concept.technical_assessment.model.InitialFileLine;
+import scot.chriswalker.elemental_concept.technical_assessment.validator.InitialLineValidator;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,7 +12,6 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class InitialFileParser {
@@ -25,6 +24,12 @@ public class InitialFileParser {
     private static final int TRANSPORT = 4;
     private static final int AVG_SPEED = 5;
     private static final int TOP_SPEED = 6;
+
+    private final InitialLineValidator validator;
+
+    public InitialFileParser(InitialLineValidator validator) {
+        this.validator = validator;
+    }
 
     public List<InitialFileLine> parseFile(InputStream inputStream) {
         var outFile = new ArrayList<InitialFileLine>();
@@ -39,21 +44,22 @@ public class InitialFileParser {
         return outFile;
     }
 
-    public Optional<InitialFileLine> parseLine(String line) {
-        if (line.trim().isEmpty()) {
+    private Optional<InitialFileLine> parseLine(String line) {
+        String trimmedLine = line.trim();
+        if (trimmedLine.isEmpty()) {
             return Optional.empty();
         }
-        String[] split = line.trim().split("\\|");
-        if (split.length != EXPECTED_FIELD_COUNT) {
-            throw new IncorrectNumberOfFieldsInLineException(split.length);
-        }
+
+        String[] fields = trimmedLine.split("\\|");
+        validator.validateNumberOfFields(fields, EXPECTED_FIELD_COUNT);
+
         return Optional.of(new InitialFileLine(
-                UUID.fromString(split[UUID_INDEX]),
-                split[ID],
-                split[NAME],
-                split[LIKES],
-                split[TRANSPORT],
-                Double.parseDouble(split[AVG_SPEED]),
-                Double.parseDouble(split[TOP_SPEED])));
+                validator.validateAndGetUuid(fields, UUID_INDEX),
+                fields[ID],
+                fields[NAME],
+                fields[LIKES],
+                fields[TRANSPORT],
+                validator.validateAndGetDouble(fields, AVG_SPEED),
+                validator.validateAndGetDouble(fields, TOP_SPEED)));
     }
 }
