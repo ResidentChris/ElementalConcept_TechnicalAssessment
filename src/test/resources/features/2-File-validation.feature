@@ -9,7 +9,8 @@ Feature: 2. File validation
 
     1afb6f5d-a7c2-4311-a92d-974f3180ff5e|3X3D35|Jenny Walters|Likes Avocados|Rides A Scooter|8.5|15.3
     """
-    Then the following JSON is returned:
+    Then the response code is an HTTP 200 OK
+    And the response body contains the following JSON:
     """
     [
       {
@@ -33,7 +34,7 @@ Feature: 2. File validation
   Scenario: 2.3. Incorrect request body content type
     When a request is received with a content type of application/json
     Then the response code is an HTTP 400 BAD_REQUEST
-    And the response body is:
+    And the response body contains the following error message:
     """
     The request is invalid, expected a text file.
     """
@@ -41,7 +42,7 @@ Feature: 2. File validation
   Scenario: 2.4. Incorrect file content type
     When a multipart request is received containing a file with a content type of application/json
     Then the response code is an HTTP 400 BAD_REQUEST
-    And the response body is:
+    And the response body contains the following error message:
     """
     The request is invalid, expected a text file.
     """

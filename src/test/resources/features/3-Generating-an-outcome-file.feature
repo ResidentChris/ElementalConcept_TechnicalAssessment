@@ -9,8 +9,8 @@ Feature: Outcome file API - happy path
     3ce2d17b-e66a-4c1e-bca3-40eb1c9222c7|2X2D24|Mike Smith|Likes Grape|Drives an SUV|35.0|95.5
     1afb6f5d-a7c2-4311-a92d-974f3180ff5e|3X3D35|Jenny Walters|Likes Avocados|Rides A Scooter|8.5|15.3
     """
-
-    Then the following JSON is returned:
+    Then the response code is an HTTP 200 OK
+    And the response body contains the following JSON:
     """
     [
       {

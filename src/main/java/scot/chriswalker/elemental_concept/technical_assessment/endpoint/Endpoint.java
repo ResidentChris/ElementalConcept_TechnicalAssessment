@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.multipart.MultipartFile;
 import scot.chriswalker.elemental_concept.technical_assessment.exception.IncorrectFileContentTypeException;
+import scot.chriswalker.elemental_concept.technical_assessment.exception.IncorrectNumberOfFieldsInLineException;
 import scot.chriswalker.elemental_concept.technical_assessment.exception.InitialFileReadException;
 import scot.chriswalker.elemental_concept.technical_assessment.model.OutcomeFileLine;
 import scot.chriswalker.elemental_concept.technical_assessment.orchestration.FileConversionOrchestrationService;
@@ -52,5 +53,12 @@ public class Endpoint {
     @ExceptionHandler({IncorrectFileContentTypeException.class})
     public ResponseEntity<String> handleException(IncorrectFileContentTypeException e) {
         return new ResponseEntity<>("The request is invalid, expected a text file.", HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler({IncorrectNumberOfFieldsInLineException.class})
+    public ResponseEntity<String> handleException(IncorrectNumberOfFieldsInLineException e) {
+        return new ResponseEntity<>(
+                "The request is invalid, expected seven fields per line but found " + e.getActualFieldsCount() + ".",
+                HttpStatus.BAD_REQUEST);
     }
 }

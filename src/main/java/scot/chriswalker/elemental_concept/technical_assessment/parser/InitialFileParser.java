@@ -1,6 +1,7 @@
 package scot.chriswalker.elemental_concept.technical_assessment.parser;
 
 import org.springframework.stereotype.Service;
+import scot.chriswalker.elemental_concept.technical_assessment.exception.IncorrectNumberOfFieldsInLineException;
 import scot.chriswalker.elemental_concept.technical_assessment.exception.InitialFileReadException;
 import scot.chriswalker.elemental_concept.technical_assessment.model.InitialFileLine;
 
@@ -16,6 +17,7 @@ import java.util.UUID;
 @Service
 public class InitialFileParser {
 
+    private static final int EXPECTED_FIELD_COUNT = 7;
     private static final int UUID_INDEX = 0;
     private static final int ID = 1;
     private static final int NAME = 2;
@@ -42,6 +44,9 @@ public class InitialFileParser {
             return Optional.empty();
         }
         String[] split = line.trim().split("\\|");
+        if (split.length != EXPECTED_FIELD_COUNT) {
+            throw new IncorrectNumberOfFieldsInLineException(split.length);
+        }
         return Optional.of(new InitialFileLine(
                 UUID.fromString(split[UUID_INDEX]),
                 split[ID],
