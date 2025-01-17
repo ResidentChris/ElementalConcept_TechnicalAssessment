@@ -1,8 +1,10 @@
 Feature: Outcome file API - happy path
   The API should accept an Initial File, and return an Outcome File based on the input.
 
-  Scenario: 3. Generating an outcome file
+  Background:
+    Given a request is received from Hungary
 
+  Scenario: 3. Generating an outcome file
     When the following file is uploaded:
     """
     18148426-89e1-11ee-b9d1-0242ac120002|1X1D14|John Smith|Likes Apricots|Rides A Bike|6.2|12.1

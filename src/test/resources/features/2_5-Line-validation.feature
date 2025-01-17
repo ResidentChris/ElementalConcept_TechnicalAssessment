@@ -1,5 +1,8 @@
 Feature: 2.5. Line validation
 
+  Background:
+    Given a request is received from Hungary
+
   Scenario: 2.5.1. Not enough fields in line
     When the following file is uploaded:
     """

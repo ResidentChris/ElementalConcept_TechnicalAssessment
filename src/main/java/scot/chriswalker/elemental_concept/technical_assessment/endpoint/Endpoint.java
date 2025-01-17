@@ -1,5 +1,6 @@
 package scot.chriswalker.elemental_concept.technical_assessment.endpoint;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -9,12 +10,10 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.multipart.MultipartFile;
-import scot.chriswalker.elemental_concept.technical_assessment.exception.IncorrectFileContentTypeException;
-import scot.chriswalker.elemental_concept.technical_assessment.exception.IncorrectNumberOfFieldsInLineException;
-import scot.chriswalker.elemental_concept.technical_assessment.exception.InitialFileReadException;
-import scot.chriswalker.elemental_concept.technical_assessment.exception.UnexpectedTypeException;
+import scot.chriswalker.elemental_concept.technical_assessment.exception.*;
 import scot.chriswalker.elemental_concept.technical_assessment.model.OutcomeFileLine;
 import scot.chriswalker.elemental_concept.technical_assessment.orchestration.FileConversionOrchestrationService;
+import scot.chriswalker.elemental_concept.technical_assessment.validator.IpAddressValidator;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,17 +22,24 @@ import java.util.List;
 @RestController
 public class Endpoint {
 
-    private final FileConversionOrchestrationService fileConversionService;
+    private final FileConversionOrchestrationService fileConversionOrchestrationService;
+    private final IpAddressValidator ipAddressValidator;
 
-    public Endpoint(FileConversionOrchestrationService fileConversionService) {
-        this.fileConversionService = fileConversionService;
+    public Endpoint(
+            FileConversionOrchestrationService fileConversionOrchestrationService,
+            IpAddressValidator ipAddressValidator) {
+        this.fileConversionOrchestrationService = fileConversionOrchestrationService;
+        this.ipAddressValidator = ipAddressValidator;
     }
 
     @PostMapping("endpoint")
-    public ResponseEntity<List<OutcomeFileLine>> endpoint(@RequestPart MultipartFile file) {
+    public ResponseEntity<List<OutcomeFileLine>> endpoint(@RequestPart MultipartFile file, HttpServletRequest request) {
+        ipAddressValidator.validateIpAddress(request.getRemoteAddr());
+
         if (MediaType.APPLICATION_JSON_VALUE.equals(file.getContentType())) {
             throw new IncorrectFileContentTypeException();
         }
+
         try {
             return endpoint(file.getInputStream());
         } catch (IOException e) {
@@ -42,7 +48,7 @@ public class Endpoint {
     }
 
     private ResponseEntity<List<OutcomeFileLine>> endpoint(InputStream inputStream) {
-        var outcomeFile = fileConversionService.convertInputStreamToOutcomeFile(inputStream);
+        var outcomeFile = fileConversionOrchestrationService.convertInputStreamToOutcomeFile(inputStream);
         return new ResponseEntity<>(outcomeFile, HttpStatus.OK);
     }
 
@@ -68,5 +74,10 @@ public class Endpoint {
         return new ResponseEntity<>(
                 "The request is invalid, expected a " + e.getExpectedType() + " at index " + e.getExpectedIndex() + ".",
                 HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler({RequestFromBlockedRegionException.class})
+    public ResponseEntity<String> handleException(RequestFromBlockedRegionException e) {
+        return new ResponseEntity<>("This content is not available in your region.", HttpStatus.FORBIDDEN);
     }
 }

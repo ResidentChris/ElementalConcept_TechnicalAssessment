@@ -1,0 +1,5 @@
+ipValidator:
+  url: http://localhost:8080
+  blockedRegions: [
+    "CN", "ES", "US"
+  ]

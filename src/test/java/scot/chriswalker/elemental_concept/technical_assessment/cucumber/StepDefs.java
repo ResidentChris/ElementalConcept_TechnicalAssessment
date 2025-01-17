@@ -3,13 +3,16 @@ package scot.chriswalker.elemental_concept.technical_assessment.cucumber;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import jakarta.annotation.Nullable;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
 
+import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static net.javacrumbs.jsonunit.assertj.JsonAssertions.assertThatJson;
 import static net.javacrumbs.jsonunit.assertj.JsonAssertions.json;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -24,7 +27,64 @@ public class StepDefs {
         this.mockMvc = mockMvc;
     }
 
+    @Nullable
     private MvcResult result;
+
+    @When("a request is received from Hungary")
+    public void mockHungarianIpLookup() throws MalformedURLException {
+        var regex = "/json/([0-9\\.]*)\\?fields=status,message,countryCode,isp,hosting";
+        var response = """
+                {
+                  "status": "success",
+                  "countryCode": "HU",
+                  "isp": "A Hungarian ISP",
+                  "hosting": false
+                }
+                """;
+        stubFor(get(urlMatching(regex)).willReturn(ok(response)));
+    }
+
+    @When("a request is received from China")
+    public void mockChineseIpLookup() throws MalformedURLException {
+        var regex = "/json/([0-9\\.]*)\\?fields=status,message,countryCode,isp,hosting";
+        var response = """
+                {
+                  "status": "success",
+                  "countryCode": "CN",
+                  "isp": "A Chinese ISP",
+                  "hosting": false
+                }
+                """;
+        stubFor(get(urlMatching(regex)).willReturn(ok(response)));
+    }
+
+    @When("a request is received from Spain")
+    public void mockSpanishIpLookup() throws MalformedURLException {
+        var regex = "/json/([0-9\\.]*)\\?fields=status,message,countryCode,isp,hosting";
+        var response = """
+                {
+                  "status": "success",
+                  "countryCode": "ES",
+                  "isp": "A Spanish ISP",
+                  "hosting": false
+                }
+                """;
+        stubFor(get(urlMatching(regex)).willReturn(ok(response)));
+    }
+
+    @When("a request is received from America")
+    public void mockAmericanIpLookup() throws MalformedURLException {
+        var regex = "/json/([0-9\\.]*)\\?fields=status,message,countryCode,isp,hosting";
+        var response = """
+                {
+                  "status": "success",
+                  "countryCode": "US",
+                  "isp": "An American ISP",
+                  "hosting": false
+                }
+                """;
+        stubFor(get(urlMatching(regex)).willReturn(ok(response)));
+    }
 
     @When("the following file is uploaded:")
     public void usersUploadDataOnAProject(String fileContents) throws Exception {

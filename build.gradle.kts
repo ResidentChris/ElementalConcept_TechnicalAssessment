@@ -21,6 +21,7 @@ val cucumberVersion = "7.20.1"
 val h2Version = "2.3.232"
 val jsonUnitVersion = "4.1.0"
 val junitVersion = "5.11.4"
+val wiremockVersion = "3.4.0"
 
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
@@ -38,6 +39,7 @@ dependencies {
 
 	testImplementation("com.h2database:h2:$h2Version")
 	testImplementation("net.javacrumbs.json-unit:json-unit-assertj:$jsonUnitVersion")
+	testImplementation("org.wiremock.integrations:wiremock-spring-boot:$wiremockVersion")
 
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }

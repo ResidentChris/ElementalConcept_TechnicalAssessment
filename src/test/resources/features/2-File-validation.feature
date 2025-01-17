@@ -1,5 +1,8 @@
 Feature: 2. File validation
 
+  Background:
+    Given a request is received from Hungary
+
   Scenario: 2.2. Empty lines
     When the following file is uploaded:
     """

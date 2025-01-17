@@ -1,0 +1,5 @@
+ipValidator:
+  url: http://ip-api.com
+  blockedRegions: [
+    "CN", "ES", "US"
+  ]
