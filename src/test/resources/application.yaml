@@ -1,5 +1,4 @@
 ipValidator:
   url: http://localhost:8080
-  blockedRegions: [
-    "CN", "ES", "US"
-  ]
+  blockedRegions: ["CN", "ES", "US"]
+  blockedIsps: ["Amazon.com, Inc.", "Google LLC", "Microsoft Corporation"]

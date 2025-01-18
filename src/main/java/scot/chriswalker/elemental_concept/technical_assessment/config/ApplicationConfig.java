@@ -31,6 +31,9 @@ public class ApplicationConfig {
         private List<String> blockedRegions;
 
         @Nullable
+        private List<String> blockedIsps;
+
+        @Nullable
         public String getUrl() {
             return url;
         }
@@ -46,6 +49,15 @@ public class ApplicationConfig {
 
         public void setBlockedRegions(@Nullable List<String> blockedRegions) {
             this.blockedRegions = blockedRegions;
+        }
+
+        @Nullable
+        public List<String> getBlockedIsps() {
+            return blockedIsps;
+        }
+
+        public void setBlockedIsps(@Nullable List<String> blockedIsps) {
+            this.blockedIsps = blockedIsps;
         }
     }
 }

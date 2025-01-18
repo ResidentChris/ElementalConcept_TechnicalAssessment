@@ -4,8 +4,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.Nullable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClient;
 import scot.chriswalker.elemental_concept.technical_assessment.config.ApplicationConfig;
+import scot.chriswalker.elemental_concept.technical_assessment.exception.IpAddressValidationFailedException;
+import scot.chriswalker.elemental_concept.technical_assessment.exception.RequestFromBlockedDataCentreException;
 import scot.chriswalker.elemental_concept.technical_assessment.exception.RequestFromBlockedRegionException;
 
 @Service
@@ -20,17 +23,24 @@ public class DefaultIpAddressValidator implements IpAddressValidator {
     @Override
     public void validateIpAddress(String remoteAddr) {
         var validationResponse = getValidationResponse(remoteAddr);
+        assertLookupSuccess(validationResponse);
         validateRegion(validationResponse);
+        validateDataCentre(validationResponse);
     }
 
     private ValidationResponse getValidationResponse(String remoteAddr) {
         var path = "/json/" + remoteAddr + "?fields=status,message,countryCode,isp,hosting";
 
         RestClient client = RestClient.create();
-        String body = client.get()
-                .uri(ipValidator.getUrl() + path)
-                .retrieve()
-                .body(String.class);
+        String body;
+        try {
+            body = client.get()
+                    .uri(ipValidator.getUrl() + path)
+                    .retrieve()
+                    .body(String.class);
+        } catch (HttpClientErrorException e) {
+            throw new IpAddressValidationFailedException();
+        }
 
         ObjectMapper mapper = new ObjectMapper();
         try {
@@ -40,10 +50,21 @@ public class DefaultIpAddressValidator implements IpAddressValidator {
         }
     }
 
+    private void assertLookupSuccess(ValidationResponse validationResponse) {
+        if (!"success".equals(validationResponse.status)) {
+            throw new IpAddressValidationFailedException();
+        }
+    }
+
     private void validateRegion(ValidationResponse validationResponse) {
-        assert ipValidator.getBlockedRegions() != null;
         if (ipValidator.getBlockedRegions().contains(validationResponse.countryCode)) {
             throw new RequestFromBlockedRegionException();
+        }
+    }
+
+    private void validateDataCentre(ValidationResponse validationResponse) {
+        if (ipValidator.getBlockedIsps().contains(validationResponse.isp) && validationResponse.hosting == true) {
+            throw new RequestFromBlockedDataCentreException();
         }
     }
 

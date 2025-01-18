@@ -1,6 +1,7 @@
 package scot.chriswalker.elemental_concept.technical_assessment.cucumber;
 
 import io.cucumber.java.en.And;
+import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import jakarta.annotation.Nullable;
@@ -10,7 +11,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static net.javacrumbs.jsonunit.assertj.JsonAssertions.assertThatJson;
@@ -30,8 +30,8 @@ public class StepDefs {
     @Nullable
     private MvcResult result;
 
-    @When("a request is received from Hungary")
-    public void mockHungarianIpLookup() throws MalformedURLException {
+    @Given("a request is received from Hungary")
+    public void mockHungarianIpLookup() {
         var regex = "/json/([0-9\\.]*)\\?fields=status,message,countryCode,isp,hosting";
         var response = """
                 {
@@ -44,8 +44,8 @@ public class StepDefs {
         stubFor(get(urlMatching(regex)).willReturn(ok(response)));
     }
 
-    @When("a request is received from China")
-    public void mockChineseIpLookup() throws MalformedURLException {
+    @Given("a request is received from China")
+    public void mockChineseIpLookup() {
         var regex = "/json/([0-9\\.]*)\\?fields=status,message,countryCode,isp,hosting";
         var response = """
                 {
@@ -58,8 +58,8 @@ public class StepDefs {
         stubFor(get(urlMatching(regex)).willReturn(ok(response)));
     }
 
-    @When("a request is received from Spain")
-    public void mockSpanishIpLookup() throws MalformedURLException {
+    @Given("a request is received from Spain")
+    public void mockSpanishIpLookup() {
         var regex = "/json/([0-9\\.]*)\\?fields=status,message,countryCode,isp,hosting";
         var response = """
                 {
@@ -72,8 +72,8 @@ public class StepDefs {
         stubFor(get(urlMatching(regex)).willReturn(ok(response)));
     }
 
-    @When("a request is received from America")
-    public void mockAmericanIpLookup() throws MalformedURLException {
+    @Given("a request is received from America")
+    public void mockAmericanIpLookup() {
         var regex = "/json/([0-9\\.]*)\\?fields=status,message,countryCode,isp,hosting";
         var response = """
                 {
@@ -85,6 +85,125 @@ public class StepDefs {
                 """;
         stubFor(get(urlMatching(regex)).willReturn(ok(response)));
     }
+
+    @Given("a request is received from AWS")
+    public void mockAwsIpLookup() {
+        var regex = "/json/([0-9\\.]*)\\?fields=status,message,countryCode,isp,hosting";
+        var response = """
+                {
+                  "status": "success",
+                  "countryCode": "HU",
+                  "isp": "Amazon.com, Inc.",
+                  "hosting": true
+                }
+                """;
+        stubFor(get(urlMatching(regex)).willReturn(ok(response)));
+    }
+
+    @Given("a request is received from Amazon")
+    public void mockAmazonIpLookup() {
+        var regex = "/json/([0-9\\.]*)\\?fields=status,message,countryCode,isp,hosting";
+        var response = """
+                {
+                  "status": "success",
+                  "countryCode": "HU",
+                  "isp": "Amazon.com, Inc.",
+                  "hosting": false
+                }
+                """;
+        stubFor(get(urlMatching(regex)).willReturn(ok(response)));
+    }
+
+    @Given("a request is received from GCP")
+    public void mockGcpIpLookup() {
+        var regex = "/json/([0-9\\.]*)\\?fields=status,message,countryCode,isp,hosting";
+        var response = """
+                {
+                  "status": "success",
+                  "countryCode": "HU",
+                  "isp": "Google LLC",
+                  "hosting": true
+                }
+                """;
+        stubFor(get(urlMatching(regex)).willReturn(ok(response)));
+    }
+
+    @Given("a request is received from Google")
+    public void mockGoogleIpLookup() {
+        var regex = "/json/([0-9\\.]*)\\?fields=status,message,countryCode,isp,hosting";
+        var response = """
+                {
+                  "status": "success",
+                  "countryCode": "HU",
+                  "isp": "Google LLC",
+                  "hosting": false
+                }
+                """;
+        stubFor(get(urlMatching(regex)).willReturn(ok(response)));
+    }
+
+    @Given("a request is received from ADO")
+    public void mockAdoIpLookup() {
+        var regex = "/json/([0-9\\.]*)\\?fields=status,message,countryCode,isp,hosting";
+        var response = """
+                {
+                  "status": "success",
+                  "countryCode": "HU",
+                  "isp": "Microsoft Corporation",
+                  "hosting": true
+                }
+                """;
+        stubFor(get(urlMatching(regex)).willReturn(ok(response)));
+    }
+
+    @Given("a request is received from Microsoft")
+    public void mockMicrosoftIpLookup() {
+        var regex = "/json/([0-9\\.]*)\\?fields=status,message,countryCode,isp,hosting";
+        var response = """
+                {
+                  "status": "success",
+                  "countryCode": "HU",
+                  "isp": "Microsoft Corporation",
+                  "hosting": false
+                }
+                """;
+        stubFor(get(urlMatching(regex)).willReturn(ok(response)));
+    }
+
+    @Given("a request is received from another data centre")
+    public void mockOtherDataCentreIpLookup() {
+        var regex = "/json/([0-9\\.]*)\\?fields=status,message,countryCode,isp,hosting";
+        var response = """
+                {
+                  "status": "success",
+                  "countryCode": "HU",
+                  "isp": "Datapest",
+                  "hosting": true
+                }
+                """;
+        stubFor(get(urlMatching(regex)).willReturn(ok(response)));
+    }
+
+    @Given("the response code from IP address validation indicates a failure")
+    public void mockIpLookupFailureResponseCode() {
+        var regex = "/json/([0-9\\.]*)\\?fields=status,message,countryCode,isp,hosting";
+        stubFor(get(urlMatching(regex)).willReturn(badRequest()));
+    }
+
+    @Given("the response body from IP address validation indicates a failure")
+    public void mockIpLookupFailureResponseBody() {
+        var regex = "/json/([0-9\\.]*)\\?fields=status,message,countryCode,isp,hosting";
+        var response = """
+                {
+                  "status": "fail",
+                  "countryCode": "HU",
+                  "isp": "Microsoft Corporation",
+                  "hosting": true
+                }
+                """;
+        stubFor(get(urlMatching(regex)).willReturn(ok(response)));
+    }
+
 
     @When("the following file is uploaded:")
     public void usersUploadDataOnAProject(String fileContents) throws Exception {

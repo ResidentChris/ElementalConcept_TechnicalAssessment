@@ -80,4 +80,14 @@ public class Endpoint {
     public ResponseEntity<String> handleException(RequestFromBlockedRegionException e) {
         return new ResponseEntity<>("This content is not available in your region.", HttpStatus.FORBIDDEN);
     }
+
+    @ExceptionHandler({RequestFromBlockedDataCentreException.class})
+    public ResponseEntity<String> handleException(RequestFromBlockedDataCentreException e) {
+        return new ResponseEntity<>("This IP address has been blocked because it is a data centre.", HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler({IpAddressValidationFailedException.class})
+    public ResponseEntity<String> handleException(IpAddressValidationFailedException e) {
+        return new ResponseEntity<>("IP address validation failed due to an error.", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }

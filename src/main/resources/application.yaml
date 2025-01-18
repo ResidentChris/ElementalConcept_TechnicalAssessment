@@ -1,5 +1,4 @@
 ipValidator:
   url: http://ip-api.com
-  blockedRegions: [
-    "CN", "ES", "US"
-  ]
+  blockedRegions: ["CN", "ES", "US"]
+  blockedIsps: ["Amazon.com, Inc.", "Google LLC", "Microsoft Corporation"]
