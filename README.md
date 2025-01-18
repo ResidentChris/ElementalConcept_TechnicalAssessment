@@ -115,7 +115,7 @@ And the response body is:
     This IP address has been blocked because it is a data centre.
 
 
-### 1.5. IP Address Validation unsuccessful (response code)
+### 1.5. IP Address Validation unsuccessful
 
 #### 1.5.1. Response code
 

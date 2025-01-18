@@ -3,6 +3,9 @@ Feature: 2. File validation
   Background:
     Given a request is received from Hungary
 
+  Scenario: 2.1. Valid file and request
+  This is covered by Scenario 3. Generating an outcome file.
+
   Scenario: 2.2. Empty lines
     When the following file is uploaded:
     """
