@@ -11,6 +11,10 @@ import java.util.List;
 @EnableConfigurationProperties
 @ConfigurationProperties
 public class ApplicationConfig {
+
+    public static final String IP_ADDRESS_VALIDATION_DISABLED = "ipAddressValidationDisabled";
+    public static final String IP_ADDRESS_VALIDATION_ENABLED = "!" + IP_ADDRESS_VALIDATION_DISABLED;
+
     @Nullable
     private IpValidator ipValidator;
 
