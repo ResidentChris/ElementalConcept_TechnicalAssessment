@@ -36,21 +36,26 @@ public class Endpoint {
     @PostMapping("endpoint")
     public ResponseEntity<List<OutcomeFileLine>> endpoint(@RequestPart MultipartFile file, HttpServletRequest request) {
         ipAddressValidator.validateIpAddress(request.getRemoteAddr());
+        validateFileContentType(file);
+        InputStream inputStream = getFileInputStream(file);
 
+        var outcomeFile = fileConversionOrchestrationService.convertInputStreamToOutcomeFile(inputStream);
+
+        return new ResponseEntity<>(outcomeFile, HttpStatus.OK);
+    }
+
+    private void validateFileContentType(MultipartFile file) {
         if (MediaType.APPLICATION_JSON_VALUE.equals(file.getContentType())) {
             throw new IncorrectFileContentTypeException();
         }
+    }
 
+    private InputStream getFileInputStream(MultipartFile file) {
         try {
-            return endpoint(file.getInputStream());
+            return file.getInputStream();
         } catch (IOException e) {
             throw new InitialFileReadException(e);
         }
-    }
-
-    private ResponseEntity<List<OutcomeFileLine>> endpoint(InputStream inputStream) {
-        var outcomeFile = fileConversionOrchestrationService.convertInputStreamToOutcomeFile(inputStream);
-        return new ResponseEntity<>(outcomeFile, HttpStatus.OK);
     }
 
     @ExceptionHandler({MultipartException.class})
