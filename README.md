@@ -21,7 +21,7 @@ These instructions assume that Docker is running.
     # Run Docker images
     docker compose up -d
 
-To smoke test this running instance, open the Elemental_Concept_Technical_Assessment.postman_collection.json file in
+To smoke test this running instance, open the `Elemental_Concept_Technical_Assessment.postman_collection.json` file in
 Postman.
 
 Note that Postman will probably not be able to read the `sample.txt` file without a bit of help, and so you might see
