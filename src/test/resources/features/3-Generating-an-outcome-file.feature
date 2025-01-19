@@ -32,3 +32,6 @@ Feature: Outcome file API - happy path
       }
     ]
     """
+    And the following data is logged to the database:
+      | requestUri                | requestTimestamp | httpResponseCode | requestIpAddress | requestCountryCode | requestIpProvider | timeLapsed |
+      | http://localhost/endpoint | 1737214200000    | 200              | 127.0.0.1        | HU                 | A Hungarian ISP   | 50         |

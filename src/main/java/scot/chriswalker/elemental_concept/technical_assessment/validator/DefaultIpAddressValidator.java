@@ -11,6 +11,7 @@ import scot.chriswalker.elemental_concept.technical_assessment.config.Applicatio
 import scot.chriswalker.elemental_concept.technical_assessment.exception.IpAddressValidationFailedException;
 import scot.chriswalker.elemental_concept.technical_assessment.exception.RequestFromBlockedDataCentreException;
 import scot.chriswalker.elemental_concept.technical_assessment.exception.RequestFromBlockedRegionException;
+import scot.chriswalker.elemental_concept.technical_assessment.logging.LogInfoBuilder;
 
 import static scot.chriswalker.elemental_concept.technical_assessment.config.ApplicationConfig.IP_ADDRESS_VALIDATION_ENABLED;
 
@@ -19,14 +20,17 @@ import static scot.chriswalker.elemental_concept.technical_assessment.config.App
 public class DefaultIpAddressValidator implements IpAddressValidator {
 
     private final ApplicationConfig.IpValidator ipValidator;
+    private final LogInfoBuilder logInfoBuilder;
 
-    public DefaultIpAddressValidator(ApplicationConfig applicationConfig) {
+    public DefaultIpAddressValidator(ApplicationConfig applicationConfig, LogInfoBuilder logInfoBuilder) {
         this.ipValidator = applicationConfig.getIpValidator();
+        this.logInfoBuilder = logInfoBuilder;
     }
 
     @Override
     public void validateIpAddress(String remoteAddr) {
         var validationResponse = getValidationResponse(remoteAddr);
+        logResult(validationResponse);
         assertLookupSuccess(validationResponse);
         validateRegion(validationResponse);
         validateDataCentre(validationResponse);
@@ -70,6 +74,11 @@ public class DefaultIpAddressValidator implements IpAddressValidator {
         if (ipValidator.getBlockedIsps().contains(validationResponse.isp) && validationResponse.hosting == true) {
             throw new RequestFromBlockedDataCentreException();
         }
+    }
+
+    private void logResult(ValidationResponse validationResponse) {
+        logInfoBuilder.setRequestCountryCode(validationResponse.countryCode);
+        logInfoBuilder.setRequestIpProvider(validationResponse.isp);
     }
 
     private record ValidationResponse(String status,

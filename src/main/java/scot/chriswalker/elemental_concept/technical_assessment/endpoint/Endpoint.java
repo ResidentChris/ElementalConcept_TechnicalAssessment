@@ -10,7 +10,8 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.multipart.MultipartFile;
-import scot.chriswalker.elemental_concept.technical_assessment.exception.*;
+import scot.chriswalker.elemental_concept.technical_assessment.exception.IncorrectFileContentTypeException;
+import scot.chriswalker.elemental_concept.technical_assessment.exception.InitialFileReadException;
 import scot.chriswalker.elemental_concept.technical_assessment.model.OutcomeFileLine;
 import scot.chriswalker.elemental_concept.technical_assessment.orchestration.FileConversionOrchestrationService;
 import scot.chriswalker.elemental_concept.technical_assessment.validator.IpAddressValidator;
@@ -55,39 +56,5 @@ public class Endpoint {
     @ExceptionHandler({MultipartException.class})
     public ResponseEntity<String> handleException(MultipartException e) {
         return new ResponseEntity<>("The request is invalid, expected a text file.", HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler({IncorrectFileContentTypeException.class})
-    public ResponseEntity<String> handleException(IncorrectFileContentTypeException e) {
-        return new ResponseEntity<>("The request is invalid, expected a text file.", HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler({IncorrectNumberOfFieldsInLineException.class})
-    public ResponseEntity<String> handleException(IncorrectNumberOfFieldsInLineException e) {
-        return new ResponseEntity<>(
-                "The request is invalid, expected seven fields per line but found " + e.getActualFieldsCount() + ".",
-                HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler({UnexpectedTypeException.class})
-    public ResponseEntity<String> handleException(UnexpectedTypeException e) {
-        return new ResponseEntity<>(
-                "The request is invalid, expected a " + e.getExpectedType() + " at index " + e.getExpectedIndex() + ".",
-                HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler({RequestFromBlockedRegionException.class})
-    public ResponseEntity<String> handleException(RequestFromBlockedRegionException e) {
-        return new ResponseEntity<>("This content is not available in your region.", HttpStatus.FORBIDDEN);
-    }
-
-    @ExceptionHandler({RequestFromBlockedDataCentreException.class})
-    public ResponseEntity<String> handleException(RequestFromBlockedDataCentreException e) {
-        return new ResponseEntity<>("This IP address has been blocked because it is a data centre.", HttpStatus.FORBIDDEN);
-    }
-
-    @ExceptionHandler({IpAddressValidationFailedException.class})
-    public ResponseEntity<String> handleException(IpAddressValidationFailedException e) {
-        return new ResponseEntity<>("IP address validation failed due to an error.", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

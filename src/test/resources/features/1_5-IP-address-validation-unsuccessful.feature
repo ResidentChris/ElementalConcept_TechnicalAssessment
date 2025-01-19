@@ -13,6 +13,9 @@ Feature: 1.5. IP Address Validation unsuccessful
     """
     IP address validation failed due to an error.
     """
+    And the following data is logged to the database:
+      | requestUri                | requestTimestamp | httpResponseCode | requestIpAddress | requestCountryCode | requestIpProvider | timeLapsed |
+      | http://localhost/endpoint | 1737214200000    | 500              | 127.0.0.1        |                    |                   | 50         |
 
   Scenario: 1.5.2. Validation unsuccessful (response body)
     Given the response body from IP address validation indicates a failure
@@ -27,3 +30,6 @@ Feature: 1.5. IP Address Validation unsuccessful
     """
     IP address validation failed due to an error.
     """
+    And the following data is logged to the database:
+      | requestUri                | requestTimestamp | httpResponseCode | requestIpAddress | requestCountryCode | requestIpProvider | timeLapsed |
+      | http://localhost/endpoint | 1737214200000    | 500              | 127.0.0.1        | HU                 | Datapest          | 50         |

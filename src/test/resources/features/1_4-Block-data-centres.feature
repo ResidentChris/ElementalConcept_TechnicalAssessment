@@ -13,6 +13,9 @@ Feature: 1.4. Block data centres
     """
     This IP address has been blocked because it is a data centre.
     """
+    And the following data is logged to the database:
+      | requestUri                | requestTimestamp | httpResponseCode | requestIpAddress | requestCountryCode | requestIpProvider | timeLapsed |
+      | http://localhost/endpoint | 1737214200000    | 403              | 127.0.0.1        | HU                 | Amazon.com, Inc.  | 50         |
 
   Scenario: 1.4.1. Allow Amazon (non-data-centre)
     Given a request is received from Amazon
@@ -43,6 +46,9 @@ Feature: 1.4. Block data centres
       }
     ]
     """
+    And the following data is logged to the database:
+      | requestUri                | requestTimestamp | httpResponseCode | requestIpAddress | requestCountryCode | requestIpProvider | timeLapsed |
+      | http://localhost/endpoint | 1737214200000    | 200              | 127.0.0.1        | HU                 | Amazon.com, Inc.  | 50         |
 
   Scenario: 1.4.2. Block GCP
     Given a request is received from GCP
@@ -57,6 +63,9 @@ Feature: 1.4. Block data centres
     """
     This IP address has been blocked because it is a data centre.
     """
+    And the following data is logged to the database:
+      | requestUri                | requestTimestamp | httpResponseCode | requestIpAddress | requestCountryCode | requestIpProvider | timeLapsed |
+      | http://localhost/endpoint | 1737214200000    | 403              | 127.0.0.1        | HU                 | Google LLC        | 50         |
 
   Scenario: 1.4.2. Allow Google (non-data-centre)
     Given a request is received from Google
@@ -87,6 +96,9 @@ Feature: 1.4. Block data centres
       }
     ]
     """
+    And the following data is logged to the database:
+      | requestUri                | requestTimestamp | httpResponseCode | requestIpAddress | requestCountryCode | requestIpProvider | timeLapsed |
+      | http://localhost/endpoint | 1737214200000    | 200              | 127.0.0.1        | HU                 | Google LLC        | 50         |
 
   Scenario: 1.4.3. Block ADO
     Given a request is received from ADO
@@ -101,6 +113,9 @@ Feature: 1.4. Block data centres
     """
     This IP address has been blocked because it is a data centre.
     """
+    And the following data is logged to the database:
+      | requestUri                | requestTimestamp | httpResponseCode | requestIpAddress | requestCountryCode | requestIpProvider     | timeLapsed |
+      | http://localhost/endpoint | 1737214200000    | 403              | 127.0.0.1        | HU                 | Microsoft Corporation | 50         |
 
   Scenario: 1.4.3. Allow Microsoft (non-data-centre)
     Given a request is received from Microsoft
@@ -131,6 +146,9 @@ Feature: 1.4. Block data centres
       }
     ]
     """
+    And the following data is logged to the database:
+      | requestUri                | requestTimestamp | httpResponseCode | requestIpAddress | requestCountryCode | requestIpProvider     | timeLapsed |
+      | http://localhost/endpoint | 1737214200000    | 200              | 127.0.0.1        | HU                 | Microsoft Corporation | 50         |
 
   Scenario: 1.4.4. Allow other data centres
     Given a request is received from another data centre
@@ -161,3 +179,6 @@ Feature: 1.4. Block data centres
       }
     ]
     """
+    And the following data is logged to the database:
+      | requestUri                | requestTimestamp | httpResponseCode | requestIpAddress | requestCountryCode | requestIpProvider | timeLapsed |
+      | http://localhost/endpoint | 1737214200000    | 200              | 127.0.0.1        | HU                 | Datapest          | 50         |

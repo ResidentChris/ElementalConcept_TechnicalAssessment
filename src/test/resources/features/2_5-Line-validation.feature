@@ -15,6 +15,9 @@ Feature: 2.5. Line validation
     """
     The request is invalid, expected seven fields per line but found 6.
     """
+    And the following data is logged to the database:
+      | requestUri                | requestTimestamp | httpResponseCode | requestIpAddress | requestCountryCode | requestIpProvider | timeLapsed |
+      | http://localhost/endpoint | 1737214200000    | 400              | 127.0.0.1        | HU                 | A Hungarian ISP   | 50         |
 
   Scenario: 2.5.1. Too many fields in line
     When the following file is uploaded:
@@ -28,6 +31,9 @@ Feature: 2.5. Line validation
     """
     The request is invalid, expected seven fields per line but found 8.
     """
+    And the following data is logged to the database:
+      | requestUri                | requestTimestamp | httpResponseCode | requestIpAddress | requestCountryCode | requestIpProvider | timeLapsed |
+      | http://localhost/endpoint | 1737214200000    | 400              | 127.0.0.1        | HU                 | A Hungarian ISP   | 50         |
 
   Scenario: 2.5.2. First field of line is not a UUID
     When the following file is uploaded:
@@ -41,6 +47,9 @@ Feature: 2.5. Line validation
     """
     The request is invalid, expected a UUID at index 0.
     """
+    And the following data is logged to the database:
+      | requestUri                | requestTimestamp | httpResponseCode | requestIpAddress | requestCountryCode | requestIpProvider | timeLapsed |
+      | http://localhost/endpoint | 1737214200000    | 400              | 127.0.0.1        | HU                 | A Hungarian ISP   | 50         |
 
   Scenario: 2.5.3. Sixth field of line is not a double
     When the following file is uploaded:
@@ -54,6 +63,9 @@ Feature: 2.5. Line validation
     """
     The request is invalid, expected a double at index 5.
     """
+    And the following data is logged to the database:
+      | requestUri                | requestTimestamp | httpResponseCode | requestIpAddress | requestCountryCode | requestIpProvider | timeLapsed |
+      | http://localhost/endpoint | 1737214200000    | 400              | 127.0.0.1        | HU                 | A Hungarian ISP   | 50         |
 
   Scenario: 2.5.3. Seventh field of line is not a double
     When the following file is uploaded:
@@ -67,3 +79,6 @@ Feature: 2.5. Line validation
     """
     The request is invalid, expected a double at index 6.
     """
+    And the following data is logged to the database:
+      | requestUri                | requestTimestamp | httpResponseCode | requestIpAddress | requestCountryCode | requestIpProvider | timeLapsed |
+      | http://localhost/endpoint | 1737214200000    | 400              | 127.0.0.1        | HU                 | A Hungarian ISP   | 50         |

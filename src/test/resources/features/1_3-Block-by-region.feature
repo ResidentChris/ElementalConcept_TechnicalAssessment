@@ -13,6 +13,9 @@ Feature: 1.3. Block by region
     """
     This content is not available in your region.
     """
+    And the following data is logged to the database:
+      | requestUri                | requestTimestamp | httpResponseCode | requestIpAddress | requestCountryCode | requestIpProvider | timeLapsed |
+      | http://localhost/endpoint | 1737214200000    | 403              | 127.0.0.1        | CN                 | A Chinese ISP     | 50         |
 
   Scenario: 1.3.2. Block Spanish IP addresses
     Given a request is received from Spain
@@ -27,6 +30,9 @@ Feature: 1.3. Block by region
     """
     This content is not available in your region.
     """
+    And the following data is logged to the database:
+      | requestUri                | requestTimestamp | httpResponseCode | requestIpAddress | requestCountryCode | requestIpProvider | timeLapsed |
+      | http://localhost/endpoint | 1737214200000    | 403              | 127.0.0.1        | ES                 | A Spanish ISP     | 50         |
 
   Scenario: 1.3.3. Block American IP addresses
     Given a request is received from America
@@ -41,6 +47,9 @@ Feature: 1.3. Block by region
     """
     This content is not available in your region.
     """
+    And the following data is logged to the database:
+      | requestUri                | requestTimestamp | httpResponseCode | requestIpAddress | requestCountryCode | requestIpProvider | timeLapsed |
+      | http://localhost/endpoint | 1737214200000    | 403              | 127.0.0.1        | US                 | An American ISP   | 50         |
 
   Scenario: Allow Hungarian IP addresses
     Given a request is received from Hungary
@@ -71,3 +80,6 @@ Feature: 1.3. Block by region
       }
     ]
     """
+    And the following data is logged to the database:
+      | requestUri                | requestTimestamp | httpResponseCode | requestIpAddress | requestCountryCode | requestIpProvider | timeLapsed |
+      | http://localhost/endpoint | 1737214200000    | 200              | 127.0.0.1        | HU                 | A Hungarian ISP   | 50         |

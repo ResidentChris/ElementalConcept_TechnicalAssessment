@@ -36,6 +36,9 @@ Feature: 2. File validation
       }
     ]
     """
+    And the following data is logged to the database:
+      | requestUri                | requestTimestamp | httpResponseCode | requestIpAddress | requestCountryCode | requestIpProvider | timeLapsed |
+      | http://localhost/endpoint | 1737214200000    | 200              | 127.0.0.1        | HU                 | A Hungarian ISP   | 50         |
 
   Scenario: 2.3. Incorrect request body content type
     When a request is received with a content type of application/json
@@ -44,6 +47,7 @@ Feature: 2. File validation
     """
     The request is invalid, expected a text file.
     """
+    And no data is logged to the database.
 
   Scenario: 2.4. Incorrect file content type
     When a multipart request is received containing a file with a content type of application/json
@@ -52,3 +56,6 @@ Feature: 2. File validation
     """
     The request is invalid, expected a text file.
     """
+    And the following data is logged to the database:
+      | requestUri                | requestTimestamp | httpResponseCode | requestIpAddress | requestCountryCode | requestIpProvider | timeLapsed |
+      | http://localhost/endpoint | 1737214200000    | 400              | 127.0.0.1        | HU                 | A Hungarian ISP   | 50         |

@@ -197,7 +197,7 @@ public class StepDefs {
                 {
                   "status": "fail",
                   "countryCode": "HU",
-                  "isp": "Microsoft Corporation",
+                  "isp": "Datapest",
                   "hosting": true
                 }
                 """;
