@@ -21,11 +21,13 @@ val cucumberVersion = "7.20.1"
 val h2Version = "2.3.232"
 val jsonUnitVersion = "4.1.0"
 val junitVersion = "5.11.4"
+val mysqlVersion = "9.1.0"
 val wiremockVersion = "3.4.0"
 
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-web")
+	implementation("com.mysql:mysql-connector-j:$mysqlVersion")
 
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 

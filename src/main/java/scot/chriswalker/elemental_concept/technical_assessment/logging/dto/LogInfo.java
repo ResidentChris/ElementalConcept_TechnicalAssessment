@@ -11,7 +11,7 @@ import java.util.UUID;
 public class LogInfo {
 
     @Id
-    private UUID requestId;
+    private String requestId;
     private String requestUri;
     private long requestTimestamp;
     private int httpResponseCode;
@@ -24,7 +24,7 @@ public class LogInfo {
         // Do nothing.
     }
 
-    public LogInfo(UUID requestId, String requestUri, long requestTimestamp, int httpResponseCode, String requestIpAddress, String requestCountryCode, String requestIpProvider, long timeLapsed) {
+    public LogInfo(String requestId, String requestUri, long requestTimestamp, int httpResponseCode, String requestIpAddress, String requestCountryCode, String requestIpProvider, long timeLapsed) {
         this.requestId = requestId;
         this.requestUri = requestUri;
         this.requestTimestamp = requestTimestamp;
@@ -35,11 +35,11 @@ public class LogInfo {
         this.timeLapsed = timeLapsed;
     }
 
-    public UUID getRequestId() {
+    public String getRequestId() {
         return requestId;
     }
 
-    public void setRequestId(UUID requestId) {
+    public void setRequestId(String requestId) {
         this.requestId = requestId;
     }
 

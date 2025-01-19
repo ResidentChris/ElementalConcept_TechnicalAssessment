@@ -21,7 +21,7 @@ public class LogInfoBuilder {
 
     public LogInfo build() {
         return new LogInfo(
-                requestId,
+                requestId.toString(),
                 requestUri,
                 requestTimestamp,
                 httpResponseCode,

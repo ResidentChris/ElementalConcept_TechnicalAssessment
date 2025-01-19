@@ -1,0 +1,38 @@
+name: elemental-concept-technical-assessment
+
+services:
+
+  java:
+    image: elemental-concept-technical-assessment/java:latest
+    build:
+      context: ./java
+    ports:
+      - 8080:8080
+    networks:
+      - elemental-concept-technical-assessment-network
+    stdin_open: true
+    tty: true
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: ipAddressValidationDisabled
+
+  mysql:
+    image: elemental-concept-technical-assessment/mysql:latest
+    build:
+      context: ./mysql
+    expose:
+      - 3306
+    networks:
+      - elemental-concept-technical-assessment-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 1m
+      start_interval: 10s
+
+networks:
+  elemental-concept-technical-assessment-network:
